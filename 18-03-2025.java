@@ -1,28 +1,69 @@
-Partition Equal Subset Sum
+2401. Longest Nice Subarray
 
 class Solution {
-  public:
-    bool equalPartition(vector<int>& arr) {
-        // code here
-        int sum = accumulate(arr.begin(), arr.end(), 0);
-        
-        // If the total sum is odd, we cannot partition it into two equal subsets
-        if (sum % 2 != 0) return false;
-        
-        int target = sum / 2;
-        int n = arr.size();
-        
-        // DP array to store if a subset with sum `j` is possible
-        vector<bool> dp(target + 1, false);
-        dp[0] = true; // Base case: Subset sum of 0 is always possible
-        
-        for (int num : arr) {
-            // Traverse in reverse to avoid using the same element multiple times
-            for (int j = target; j >= num; j--) {
-                dp[j] = dp[j] || dp[j - num];
+    public int longestNiceSubarray(int[] nums) {
+        int bit = 0;
+        int max = 1;
+        int s = 0;
+        int e = 0;
+        int n = nums.length;
+
+        while(e < n){
+            while( (bit& nums[e]) != 0){
+                bit^=nums[s++];
             }
+            bit|=nums[e];
+            if(e-s+1 > max){
+                max = e-s+1;
+            }
+            e++;
+        }
+        return max;
+    }
+}
+
+// ------------------------------------------------------------------
+
+class Solution {
+    public int longestNiceSubarray(int[] nums) {
+        
+        int start=0;
+        int res=1;
+        int cur=nums[0];
+        for(int i=1;i<nums.length;i++){
+
+            int n=nums[i];
+            while((cur&n)!=0){
+                cur=cur^nums[start];
+                start++;
+            }
+            res=Math.max(i-start+1,res);
+            cur=cur|n;
+        }
+        return res;
+
+    }
+}
+
+// ------------------------------------------------------------------
+
+class Solution {
+    public int longestNiceSubarray(int[] nums) {
+        int n = nums.length;
+        int maxLength = 1;
+        int left = 0;
+        int usedBits = 0;
+        
+        for (int right = 0; right < n; right++) {
+            while ((usedBits & nums[right]) != 0) {
+                usedBits ^= nums[left];
+                left++;
+            }
+            
+            usedBits |= nums[right];
+            maxLength = Math.max(maxLength, right - left + 1);
         }
         
-        return dp[target];
+        return maxLength;
     }
-};
+}
