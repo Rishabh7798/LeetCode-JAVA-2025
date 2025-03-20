@@ -3,7 +3,7 @@
 class Solution {
     public class UnionFind{
         public int[] p;
-        public int[] val; // & of all
+        public int[] val; 
         public int[] d;
 
         UnionFind(int n){
